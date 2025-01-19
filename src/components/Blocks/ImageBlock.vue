@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useBlockStore } from '@/store/blocks'
 import { computed, ref } from 'vue'
 
 interface Props {
@@ -39,7 +40,16 @@ function handleFileChange(event: Event): void {
   if (target)
     target.value = ''
 
-  // TODO: set the images to the store
+  useBlockStore().setBlocks({
+    id: Date.now().toString(),
+    links: images.value,
+    styleProperty: {
+      topPadding: 10,
+      bottomPadding: 10,
+      galleryLayout: 'default',
+      backgroundColor: '#ffffff',
+    },
+  })
 }
 </script>
 
