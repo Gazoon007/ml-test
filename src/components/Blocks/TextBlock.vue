@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useBlockStore } from '@/store/blocks'
 import { computed, defineProps, ref } from 'vue'
 
 interface Props {
@@ -14,8 +15,16 @@ const data = ref('Write engaging and informative content that will help your rea
 
 function updateText(event) {
   data.value = event.target.innerHTML
-
-  // TODO: set the text content to the store
+  useBlockStore().setBlocks({
+    id: Date.now().toString(),
+    content: data.value,
+    styleProperty: {
+      topPadding: 10,
+      bottomPadding: 10,
+      color: '#000000',
+      backgroundColor: '#ffffff',
+    },
+  })
 }
 </script>
 
