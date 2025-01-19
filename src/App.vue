@@ -1,47 +1,59 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+<script setup lang="ts">
+import Canvas from '@/components/Canvas.vue'
+import Sidebar from '@/components/Sidebar.vue'
+import { ref } from 'vue'
+
+const isSidebarOpen = ref(true)
+
+function toggleSidebar() {
+  isSidebarOpen.value = !isSidebarOpen.value
+}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125">
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <div class="flex flex-col md:flex-row min-h-screen bg-gray-100">
+    <div class="md:hidden bg-gray-800 text-white p-4 flex items-center justify-between">
+      <h1 class="text-xl font-bold">
+        Page Builder
+      </h1>
+      <button
+        class="p-2 hover:bg-gray-700 rounded-md"
+        @click="toggleSidebar"
+      >
+        <span class="text-2xl">☰</span>
+      </button>
     </div>
-  </header>
 
-  <main>
-    <TheWelcome />
-  </main>
+    <Sidebar
+      :is-open="isSidebarOpen"
+      class="transition-all duration-300"
+      @close="toggleSidebar"
+    />
+
+    <Canvas />
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
+<style>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 6px;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 </style>
