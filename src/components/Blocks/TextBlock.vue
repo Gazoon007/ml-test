@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Tiptap from '@/components/Tiptap.vue'
+
 import { useBlockStore } from '@/store/blocks'
 import { computed, defineProps, ref } from 'vue'
 
@@ -11,7 +13,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const customVPadding = computed(() => `pt-${props?.topPadding ?? 10} pb-${props?.bottomPadding ?? 10}`)
-const data = ref('Write engaging and informative content that will help your readers understand your message.')
+const data = ref('')
 
 function updateText(event) {
   data.value = event.target.innerHTML
@@ -21,7 +23,6 @@ function updateText(event) {
     styleProperty: {
       topPadding: 10,
       bottomPadding: 10,
-      color: '#000000',
       backgroundColor: '#ffffff',
     },
   })
@@ -30,7 +31,7 @@ function updateText(event) {
 
 <template>
   <div :class="`p-4 border ${customVPadding} rounded bg-[${props?.backgroundColor ?? '#808080'}]`">
-    <div :class="`text-${props?.color ?? '#000000'}`" contenteditable="true" class="border p-2" @input="updateText" v-html="data" />
+    <Tiptap @input="updateText" />
   </div>
 </template>
 

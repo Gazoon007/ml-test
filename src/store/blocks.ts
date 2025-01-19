@@ -19,7 +19,6 @@ export interface TextBlock extends Block {
   styleProperty: {
     topPadding: number
     bottomPadding: number
-    color: string
     backgroundColor: string
   }
 }
