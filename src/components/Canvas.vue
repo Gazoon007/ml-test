@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ImageBlock from '@/components/Blocks/ImageBlock.vue'
 import TextBlock from '@/components/Blocks/TextBlock.vue'
+import BlockWrapper from '@/components/BlockWrapper.vue'
 import { useHoverFirstItemStore } from '@/store/blocks'
 import { defineComponent, ref, useTemplateRef } from 'vue'
 import { useDraggable } from 'vue-draggable-plus'
@@ -47,7 +48,9 @@ useHoverFirstItemStore().$subscribe(() => {
           <div class="min-h-[500px]">
             <section ref="dropzone">
               <div v-for="(block, idx) in blocks" :key="idx">
-                <component :is="block.type === 'ImageBlock' ? ImageBlock : TextBlock" />
+                <BlockWrapper>
+                  <component :is="block.type === 'ImageBlock' ? ImageBlock : TextBlock" />
+                </BlockWrapper>
               </div>
               <template v-if="blocks.length === 0 && !hoverFirst">
                 <div class="flex items-center justify-center h-[500px] border-2 border-dashed border-gray-300 rounded-lg">
