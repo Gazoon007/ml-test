@@ -1,3 +1,4 @@
+import { useArrayManager } from '@/composables/useArrayManager'
 import { defineStore } from 'pinia'
 
 interface Block {
@@ -30,8 +31,15 @@ export const useBlockStore = defineStore('blocks', {
   }),
 
   actions: {
-    setBlocks(block: ImageBlock | TextBlock) {
-      this.blocks.push(block)
+    setBlock(block: ImageBlock | TextBlock, index: number) {
+      const { replace, mutatedArray } = useArrayManager(this.blocks)
+      replace(block, index)
+      this.blocks = mutatedArray
+    },
+    addBlock(block: ImageBlock | TextBlock, index: number) {
+      const { insert, mutatedArray } = useArrayManager(this.blocks)
+      insert(block, index)
+      this.blocks = mutatedArray
     },
     setSelectedBlockIdx(idx: number) {
       this.selectedBlockIdx = idx

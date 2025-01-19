@@ -9,6 +9,7 @@ interface Props {
   bottomPadding: number
   backgroundColor: string
   color: string
+  index: number
 }
 
 const props = defineProps<Props>()
@@ -17,15 +18,15 @@ const data = ref('')
 
 function updateText(event) {
   data.value = event.target.innerHTML
-  useBlockStore().setBlocks({
-    id: Date.now().toString(),
+  useBlockStore().setBlock({
+    id: useBlockStore().getBlocks[props.index].id,
     content: data.value,
     styleProperty: {
       topPadding: 10,
       bottomPadding: 10,
       backgroundColor: '#ffffff',
     },
-  })
+  }, props.index)
 }
 </script>
 

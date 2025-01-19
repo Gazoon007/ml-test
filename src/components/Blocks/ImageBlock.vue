@@ -9,6 +9,7 @@ interface Props {
   topPadding: number
   bottomPadding: number
   galleryLayout: 'default' | 'spaceless' | 'full-width'
+  index: number
 }
 
 const props = defineProps<Props>()
@@ -31,17 +32,16 @@ function closeModal() {
 
 function handleImageSelected(image: string) {
   images.value[currentImageIndex.value] = image
-
-  useBlockStore().setBlocks({
-    id: Date.now().toString(),
+  useBlockStore().setBlock({
+    id: useBlockStore().getBlocks[props.index].id,
     links: images.value,
     styleProperty: {
-      topPadding: 10,
-      bottomPadding: 10,
+      topPadding: 100,
+      bottomPadding: 100,
       galleryLayout: 'default',
       backgroundColor: '#ffffff',
     },
-  })
+  }, props.index)
 }
 </script>
 
