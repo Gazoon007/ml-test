@@ -1,8 +1,12 @@
-<script setup>
-import { ref } from 'vue'
+<script setup lang="ts">
+import { useBlockStore } from '@/store/blocks'
+import { defineProps, ref } from 'vue'
+
+defineProps<{
+  index: number
+}>()
 
 const hoveredSection = ref(null)
-
 // TODO: Implement the methods
 const methods = [
   { name: 'Move', action: () => {} },
@@ -16,10 +20,12 @@ const leftMethods = methods.slice(0, 3)
 const rightMethods = methods.slice(3)
 
 function showControlPanel(index) {
+  useBlockStore().setSelectedBlockIdx(index)
   hoveredSection.value = index
 }
 
 function hideControlPanel() {
+  useBlockStore().setSelectedBlockIdx(null)
   hoveredSection.value = null
 }
 </script>

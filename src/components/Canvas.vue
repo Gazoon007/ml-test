@@ -48,7 +48,7 @@ useHoverFirstItemStore().$subscribe(() => {
           <div class="min-h-[500px]">
             <section ref="dropzone">
               <div v-for="(block, idx) in blocks" :key="idx">
-                <BlockWrapper>
+                <BlockWrapper :index="idx">
                   <component :is="block.type === 'ImageBlock' ? ImageBlock : TextBlock" />
                 </BlockWrapper>
               </div>
