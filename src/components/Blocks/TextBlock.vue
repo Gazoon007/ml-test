@@ -7,16 +7,20 @@ import { computed, defineProps, ref } from 'vue'
 
 const props = defineProps<{ index: number }>()
 
-const block = useBlockStore().getBlocks[props.index] as TextBlock
-const { topPadding, bottomPadding, backgroundColor } = block.styleProperty
+const block = computed(() => useBlockStore().getBlocks[props.index] as TextBlock)
 
-const customVPadding = computed(() => `pt-${topPadding ?? 10} pb-${bottomPadding ?? 10}`)
-const data = ref(block.content)
+const customPadding = computed(() => {
+  const { topPadding, bottomPadding } = block.value.styleProperty
+  return `${topPadding ?? 0}px 10px ${bottomPadding ?? 0}px 10px`
+})
+
+const data = ref(block.value.content)
+const backgroundColor = computed(() => block.value.styleProperty.backgroundColor)
 
 function updateText(event) {
   data.value = event.target.innerHTML
   useBlockStore().setBlock({
-    id: block.id,
+    id: block.value.id,
     type: 'TextBlock',
     content: data.value,
     styleProperty: {
@@ -29,13 +33,12 @@ function updateText(event) {
 </script>
 
 <template>
-  <div :class="`p-4 border ${customVPadding} rounded bg-[${backgroundColor ?? '#808080'}]`">
+  <div
+    :style="{
+      padding: `${customPadding}`,
+      backgroundColor: backgroundColor ?? '#ffffff',
+    }"
+  >
     <Tiptap :content="data" @focusout="updateText" />
   </div>
 </template>
-
-<style scoped>
-[contenteditable]:focus {
-  outline: 0 solid transparent;
-}
-</style>

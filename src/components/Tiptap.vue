@@ -32,7 +32,6 @@ const actions = computed(() => [
   { label: '</>', handler: () => editor.value.chain().focus().toggleCode().run(), disabled: !editor.value?.can().chain().focus().toggleCode().run(), isActive: editor.value?.isActive('code') },
   { label: '⌫', handler: () => editor.value.chain().focus().unsetAllMarks().run(), disabled: false, isActive: false },
   { label: '🟰', handler: () => editor.value.chain().focus().clearNodes().run(), disabled: false, isActive: false },
-  { label: '¶', handler: () => editor.value.chain().focus().setParagraph().run(), disabled: false, isActive: editor.value?.isActive('paragraph') },
   { label: '•', handler: () => editor.value.chain().focus().toggleBulletList().run(), disabled: false, isActive: editor.value?.isActive('bulletList') },
   { label: '1.', handler: () => editor.value.chain().focus().toggleOrderedList().run(), disabled: false, isActive: editor.value?.isActive('orderedList') },
   { label: '↩', handler: () => editor.value.chain().focus().undo().run(), disabled: !editor.value?.can().chain().focus().undo().run(), isActive: false },
@@ -41,9 +40,8 @@ const actions = computed(() => [
 </script>
 
 <template>
-  <!-- FIXME: visibility of text editor -->
-  <div v-if="editor" @focusout="visibility = 'hidden'">
-    <div :class="`content-visibility-${visibility} flex flex-wrap gap-2`" @blur="visibility = 'hidden'">
+  <div v-if="editor">
+    <div :class="`content-visibility-${visibility} flex flex-wrap gap-2`">
       <button
         v-for="action in actions"
         :key="action.label"
@@ -59,6 +57,12 @@ const actions = computed(() => [
         {{ action.label }}
       </button>
     </div>
-    <EditorContent :editor="editor" @focusin="visibility = 'auto'" />
+    <EditorContent :editor="editor" @click="visibility = 'visible'" />
   </div>
 </template>
+
+<style>
+[contenteditable]:focus {
+  outline: 0 solid transparent;
+}
+</style>
