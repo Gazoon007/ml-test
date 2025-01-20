@@ -10,7 +10,6 @@ const hoveredSection = ref(null)
 const { moveUp, moveDown, duplicate, remove, mutatedArray } = useArrayManager(useBlockStore().getBlocks)
 
 const methods = [
-  { name: 'Move', action: () => {} },
   { name: 'Move up', action: idx => moveUp(idx) },
   { name: 'Move down', action: idx => moveDown(idx) },
   { name: 'Duplicate', action: idx => duplicate(idx) },
@@ -22,8 +21,8 @@ watch(mutatedArray, (val) => {
   useBlockStore().setBlocks(val)
 })
 
-const leftMethods = methods.slice(0, 3)
-const rightMethods = methods.slice(3)
+const leftMethods = methods.slice(0, 2)
+const rightMethods = methods.slice(2)
 
 function showControlPanel(index) {
   hoveredSection.value = index

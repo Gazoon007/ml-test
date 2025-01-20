@@ -3,6 +3,7 @@ import type { TextBlock } from '@/store/blocks'
 
 import Tiptap from '@/components/Tiptap.vue'
 import { useBlockStore } from '@/store/blocks'
+import { useDebounceFn } from '@vueuse/core'
 import { computed, defineProps, ref } from 'vue'
 
 const props = defineProps<{ index: number }>()
@@ -17,20 +18,26 @@ const customPadding = computed(() => {
 const data = ref(block.value.content)
 const backgroundColor = computed(() => block.value.styleProperty.backgroundColor)
 
-function updateText(event) {
-  const { topPadding, bottomPadding, backgroundColor } = block.value.styleProperty
+const tiptapRef = ref(null)
 
-  data.value = event.target.innerHTML
+// TODO: find better approach later
+const debouncedUpdate = useDebounceFn((text: string) => {
+  const { topPadding, bottomPadding, backgroundColor } = block.value.styleProperty
   useBlockStore().setBlock({
     id: block.value.id,
     type: 'TextBlock',
-    content: data.value,
+    content: text,
     styleProperty: {
       topPadding,
       bottomPadding,
       backgroundColor,
     },
   }, props.index)
+}, 1000)
+
+function updateText(text: string) {
+  data.value = text
+  debouncedUpdate(text)
 }
 </script>
 
@@ -41,6 +48,6 @@ function updateText(event) {
       backgroundColor: backgroundColor ?? '#ffffff',
     }"
   >
-    <Tiptap :content="data" @focusout="updateText" />
+    <Tiptap ref="tiptapRef" :content="data" @update:content="updateText" />
   </div>
 </template>

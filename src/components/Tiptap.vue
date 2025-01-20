@@ -4,9 +4,10 @@ import ListItem from '@tiptap/extension-list-item'
 import TextStyle from '@tiptap/extension-text-style'
 import StarterKit from '@tiptap/starter-kit'
 import { Editor, EditorContent } from '@tiptap/vue-3'
-import { computed, defineProps, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, defineEmits, defineProps, onBeforeUnmount, onMounted, ref } from 'vue'
 
-const { content } = defineProps({ content: String })
+const props = defineProps({ content: String })
+const emit = defineEmits(['update:content'])
 const editor = ref(null)
 const visibility = ref('hidden')
 
@@ -17,7 +18,13 @@ onMounted(() => {
       TextStyle.configure({ types: [ListItem.name] }),
       Color.configure({ types: [TextStyle.name, ListItem.name] }),
     ],
-    content,
+    content: props.content,
+    onUpdate: ({ editor }) => {
+      emit('update:content', editor.getHTML())
+    },
+    onFocus: () => {
+      visibility.value = 'visible'
+    },
   })
 })
 
@@ -41,7 +48,10 @@ const actions = computed(() => [
 
 <template>
   <div v-if="editor">
-    <div :class="`content-visibility-${visibility} flex flex-wrap gap-2`">
+    <!-- FIXME: Fix visibility of the editor action panel logic -->
+    <div
+      :class="`content-visibility-${visibility} flex flex-wrap gap-2 control-panel`"
+    >
       <button
         v-for="action in actions"
         :key="action.label"
@@ -53,16 +63,25 @@ const actions = computed(() => [
         }"
         class="px-4 py-2 rounded cursor-pointer hover:bg-purple-400"
         @click.prevent="action.handler"
+        @mousedown.prevent
       >
         {{ action.label }}
       </button>
     </div>
-    <EditorContent :editor="editor" @click="visibility = 'visible'" />
+    <EditorContent :editor="editor" />
   </div>
 </template>
 
 <style>
 [contenteditable]:focus {
   outline: 0 solid transparent;
+}
+
+.content-visibility-hidden {
+  content-visibility: hidden;
+}
+
+.content-visibility-visible {
+  content-visibility: visible;
 }
 </style>
