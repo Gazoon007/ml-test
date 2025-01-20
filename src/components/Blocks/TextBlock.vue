@@ -18,15 +18,17 @@ const data = ref(block.value.content)
 const backgroundColor = computed(() => block.value.styleProperty.backgroundColor)
 
 function updateText(event) {
+  const { topPadding, bottomPadding, backgroundColor } = block.value.styleProperty
+
   data.value = event.target.innerHTML
   useBlockStore().setBlock({
     id: block.value.id,
     type: 'TextBlock',
     content: data.value,
     styleProperty: {
-      topPadding: 10,
-      bottomPadding: 10,
-      backgroundColor: '#ffffff',
+      topPadding,
+      bottomPadding,
+      backgroundColor,
     },
   }, props.index)
 }
