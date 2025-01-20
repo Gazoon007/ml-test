@@ -13,12 +13,12 @@ interface PaddingStyle {
   bottomPadding: number
 }
 
-interface ImageBlockStyle extends PaddingStyle {
-  galleryLayout: 'default' | 'spaceless' | 'full-width'
+export interface ImageBlockStyle extends PaddingStyle {
+  galleryLayout: 'default' | 'spaceless'
   backgroundColor: string
 }
 
-interface TextBlockStyle extends PaddingStyle {
+export interface TextBlockStyle extends PaddingStyle {
   backgroundColor: string
 }
 
@@ -59,15 +59,18 @@ export const useBlockStore = defineStore('blocks', {
     getBlocks(): (ImageBlock | TextBlock)[] {
       return this.blocks ?? []
     },
-    getStyleProperty(): object {
-      return this.blocks[0].styleProperty
+    getCurrentBlock(): (ImageBlock | TextBlock) {
+      return this.blocks[this.selectedBlockIdx] ?? null
+    },
+    getStyleProperty(): ImageBlockStyle | TextBlockStyle | null {
+      return this.blocks[this.selectedBlockIdx]?.styleProperty ?? null
     },
   },
 })
 
 export const useHoverFirstItemStore = defineStore('hoverFirstItem', {
   state: () => ({
-    hoverFirstItem: ref(0),
+    hoverFirstItem: ref(false),
   }),
 
   actions: {

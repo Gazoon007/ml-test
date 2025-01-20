@@ -1,52 +1,79 @@
 <script setup lang="ts">
-// Add any necessary logic here
+import type { ImageBlockStyle, TextBlockStyle } from '@/store/blocks'
+import { useBlockStore } from '@/store/blocks'
+import { computed, ref } from 'vue'
+
+const styleProperty = ref<ImageBlockStyle | TextBlockStyle>({
+  backgroundColor: '',
+  bottomPadding: 0,
+  galleryLayout: undefined,
+  topPadding: 0,
+})
+
+useBlockStore().$subscribe(() => {
+  styleProperty.value = useBlockStore().getStyleProperty
+})
+
+const selectedLayout = ref('default')
+const currentBlock = computed(() => useBlockStore().getCurrentBlock)
+
+function setLayout(layout) {
+  (styleProperty.value as ImageBlockStyle).galleryLayout = layout
+  selectedLayout.value = layout
+}
 </script>
 
 <template>
-  <div class="bg-gray-100 p-6 rounded-lg w-auto">
-    <div class="mb-4">
-      <label class="block text-gray-700 font-medium mb-2">Top padding</label>
-      <input type="range" class="w-full accent-gray-700">
+  <div class="bg-gray-400 p-6 rounded-lg w-240px">
+    <div v-if="currentBlock" class="mb-4">
+      <label class="block text-gray-700 font-medium mb-2">Top Padding</label>
+      <input
+        v-model="styleProperty.topPadding"
+        type="range"
+        min="0"
+        max="100"
+        class="w-full h-2 bg-gray-300 rounded-lg accent-gray-700"
+      >
     </div>
 
-    <div class="mb-4">
-      <label class="block text-gray-700 font-medium mb-2">Bottom padding</label>
-      <input type="range" class="w-full accent-gray-700">
+    <div v-if="currentBlock" class="mb-4">
+      <label class="block text-gray-700 font-medium mb-2">Bottom Padding</label>
+      <input
+        v-model="styleProperty.bottomPadding"
+        type="range"
+        min="0"
+        max="100"
+        class="w-full h-2 bg-gray-300 rounded-lg accent-gray-700"
+      >
     </div>
 
-    <div class="mb-4">
-      <label class="block text-gray-700 font-medium mb-2">Galery Layout</label>
-      <div class="flex">
-        <button class="bg-white text-gray-700 py-2 px-4 rounded shadow border border-gray-300">
+    <div v-if="currentBlock?.type === 'ImageBlock'" class="mb-4">
+      <label class="block text-gray-700 font-medium mb-2">Gallery Layout</label>
+      <div class="flex space-x-2">
+        <button
+          class="py-2 px-4 rounded shadow border border-gray-300 transition-colors"
+          :class="selectedLayout === 'default' ? 'bg-gray-500 text-white' : 'text-gray-700'"
+          @click="setLayout('default')"
+        >
           Default
         </button>
-        <button class="bg-white text-gray-700 py-2 px-4 rounded shadow border border-gray-300">
+        <button
+          class="py-2 px-4 rounded shadow border border-gray-300 transition-colors"
+          :class="selectedLayout === 'spaceless' ? 'bg-gray-500 text-white' : 'text-gray-700'"
+          @click="setLayout('spaceless')"
+        >
           Spaceless
         </button>
-        <button class="bg-white text-gray-700 py-2 px-4 rounded shadow border border-gray-300">
-          Full width
-        </button>
       </div>
     </div>
 
-    <div class="mb-4 items-center">
-      <label class="text-gray-700 font-medium">Background</label>
-      <div>
-        <input class="ml-auto accent-gray-700">
-      </div>
-    </div>
-
-    <div class="flex justify-end">
-      <button class="bg-green-500 text-white py-2 px-4 rounded shadow mr-2">
-        Save
-      </button>
-      <button class="bg-white text-gray-700 py-2 px-4 rounded shadow border border-gray-300">
-        Cancel
-      </button>
+    <div v-if="currentBlock" class="mb-4">
+      <label class="block text-gray-700 font-medium mb-2">Background</label>
+      <input
+        v-model="styleProperty.backgroundColor"
+        type="color"
+        class="w-full h-10 p-2 border border-gray-300 rounded-lg bg-gray-200"
+      >
     </div>
   </div>
 </template>
-
-<style scoped>
-/* Additional UnoCSS styles if needed */
-</style>
