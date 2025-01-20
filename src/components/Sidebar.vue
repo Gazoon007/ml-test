@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ImageBlock, TextBlock } from '@/store/blocks'
 import { useBlockStore, useHoverFirstItemStore } from '@/store/blocks'
 import { defineProps, ref, useTemplateRef } from 'vue'
 import { useDraggable } from 'vue-draggable-plus'
@@ -6,10 +7,31 @@ import { useDraggable } from 'vue-draggable-plus'
 defineProps<{
   isOpen: boolean
 }>()
+defineEmits(['close'])
+
 const blockRef = useTemplateRef('blockRef')
-const blocks = ref([
-  { type: 'TextBlock', label: 'Text', icon: 'P' },
-  { type: 'ImageBlock', label: 'Image', icon: '🖼' },
+const blocks = ref<(ImageBlock | TextBlock)[]>([
+  {
+    id: '',
+    type: 'ImageBlock',
+    links: [null, null, null],
+    styleProperty: {
+      topPadding: 10,
+      bottomPadding: 10,
+      galleryLayout: 'default',
+      backgroundColor: '#ffffff',
+    },
+  },
+  {
+    id: '',
+    type: 'TextBlock',
+    content: 'Lorem ipsum',
+    styleProperty: {
+      topPadding: 10,
+      bottomPadding: 10,
+      backgroundColor: '#ffffff',
+    },
+  },
 ])
 
 useDraggable(blockRef, blocks, {
@@ -52,13 +74,13 @@ useDraggable(blockRef, blocks, {
       <div class="flex-1 overflow-y-auto p-4">
         <section ref="blockRef" class="components-list space-y-2">
           <div
-            v-for="block in blocks"
+            v-for="(block, idx) in blocks"
             :key="block.type"
             class="component-item p-3 bg-gray-700 rounded-md cursor-move hover:bg-gray-600 active:bg-gray-500 transition-colors"
           >
             <div class="flex items-center gap-3">
-              <span class="text-xl">{{ block.icon }}</span>
-              <span>{{ block.label }}</span>
+              <span class="text-xl">{{ idx === 0 ? '🖼️' : '📄' }}</span>
+              <span>{{ block.type.slice(0, -5) }}</span>
             </div>
           </div>
         </section>
@@ -71,6 +93,6 @@ useDraggable(blockRef, blocks, {
 .ghost {
   background-color: transparent;
   border: 2px dashed gray;
-  font-size: 0;
+  place-items: center;
 }
 </style>

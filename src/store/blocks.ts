@@ -32,23 +32,23 @@ export interface TextBlock extends BaseBlock<TextBlockStyle> {
 
 export const useBlockStore = defineStore('blocks', {
   state: () => ({
-    blocks: ref<(ImageBlock | TextBlock)[]>([]),
+    blocks: [] as (ImageBlock | TextBlock)[],
     selectedBlockIdx: null as number | null,
   }),
 
   actions: {
     setBlocks(blocks: (ImageBlock | TextBlock)[]) {
-      this.blocks.value = blocks
+      this.blocks = [...blocks]
     },
     setBlock(block: ImageBlock | TextBlock, index: number) {
-      const { replace, mutatedArray } = useArrayManager(this.blocks.value)
+      const { replace, mutatedArray } = useArrayManager(this.blocks)
       replace(block, index)
-      this.blocks.value = mutatedArray
+      this.blocks = [...mutatedArray.value]
     },
     addBlock(block: ImageBlock | TextBlock, index: number) {
-      const { insert, mutatedArray } = useArrayManager(this.blocks.value)
+      const { insert, mutatedArray } = useArrayManager(this.blocks)
       insert(block, index)
-      this.blocks.value = mutatedArray
+      this.blocks = [...mutatedArray.value]
     },
     setSelectedBlockIdx(idx: number) {
       this.selectedBlockIdx = idx
@@ -57,17 +57,17 @@ export const useBlockStore = defineStore('blocks', {
 
   getters: {
     getBlocks(): (ImageBlock | TextBlock)[] {
-      return this.blocks?.value ?? []
+      return this.blocks ?? []
     },
     getStyleProperty(): object {
-      return this.blocks.value[0].styleProperty
+      return this.blocks[0].styleProperty
     },
   },
 })
 
 export const useHoverFirstItemStore = defineStore('hoverFirstItem', {
   state: () => ({
-    hoverFirstItem: ref<boolean>(false),
+    hoverFirstItem: ref(0),
   }),
 
   actions: {
@@ -78,7 +78,7 @@ export const useHoverFirstItemStore = defineStore('hoverFirstItem', {
 
   getters: {
     getHoverFirstItem(): boolean {
-      return this.hoverFirstItem.value
+      return this.hoverFirstItem
     },
   },
 })

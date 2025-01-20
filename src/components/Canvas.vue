@@ -3,6 +3,7 @@ import ImageBlock from '@/components/Blocks/ImageBlock.vue'
 import TextBlock from '@/components/Blocks/TextBlock.vue'
 import BlockWrapper from '@/components/BlockWrapper.vue'
 import { useBlockStore, useHoverFirstItemStore } from '@/store/blocks'
+import { storeToRefs } from 'pinia'
 import { defineComponent, ref, useTemplateRef } from 'vue'
 import { useDraggable } from 'vue-draggable-plus'
 
@@ -19,35 +20,18 @@ useDraggable(dropzone, blocks, {
   ghostClass: 'ghost',
   group: 'block',
   onAdd: (evt) => {
-    if (evt.item.textContent === '🖼️Image') {
-      useBlockStore().addBlock({
-        id: Date.now().toString(),
-        links: [],
-        styleProperty: {
-          topPadding: 10,
-          bottomPadding: 10,
-          galleryLayout: 'default',
-          backgroundColor: '#ffffff',
-        },
-      }, evt.newIndex)
-    }
-    else {
-      useBlockStore().addBlock({
-        id: Date.now().toString(),
-        content: 'Lorem ipsum',
-        styleProperty: {
-          topPadding: 10,
-          bottomPadding: 10,
-          backgroundColor: '#ffffff',
-        },
-      }, evt.newIndex)
-    }
+    const block = blocks.value[evt.newIndex]
+    block.id = Date.now().toString()
+    useBlockStore().addBlock(block, evt.newIndex)
   },
+  filter: '.no-drag',
 })
 
-const hoverFirst = ref(false)
-useHoverFirstItemStore().$subscribe(() => {
-  hoverFirst.value = useHoverFirstItemStore().getHoverFirstItem
+const hoverStore = useHoverFirstItemStore()
+const { getHoverFirstItem } = storeToRefs(hoverStore)
+
+useBlockStore().$subscribe(() => {
+  blocks.value = useBlockStore().getBlocks
 })
 </script>
 
@@ -71,13 +55,13 @@ useHoverFirstItemStore().$subscribe(() => {
 
         <div class="p-4 md:p-8">
           <div class="min-h-[500px]">
-            <section ref="dropzone">
+            <section ref="dropzone" class="no-drag">
               <div v-for="(block, idx) in blocks" :key="block">
-                <BlockWrapper :index="idx">
+                <BlockWrapper :key="block.id" :index="idx">
                   <component :is="block.type === 'ImageBlock' ? ImageBlock : TextBlock" :index="idx" />
                 </BlockWrapper>
               </div>
-              <template v-if="blocks.length === 0 && !hoverFirst">
+              <template v-if="blocks.length === 0 && !getHoverFirstItem">
                 <div class="flex items-center justify-center h-[500px] border-2 border-dashed border-gray-300 rounded-lg">
                   <div class="text-center text-gray-500">
                     <p class="mb-2">
