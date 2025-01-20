@@ -8,16 +8,18 @@ const props = defineProps<{ index: number }>()
 
 const block = computed(() => useBlockStore().getBlocks[props.index] as ImageBlock)
 
-const images = ref<(string | null)[]>(block.value.links)
+const images = ref<(string | null)[]>(block.value?.links ?? null)
 const imageSlots = computed(() => images.value)
 
 const customPadding = computed(() => {
+  if (!block.value)
+    return ``
   const { topPadding, bottomPadding, galleryLayout } = block.value.styleProperty
   const horizontalPadding = galleryLayout === 'default' || galleryLayout === 'spaceless' ? '50px' : '0'
   return `${topPadding ?? 0}px ${horizontalPadding} ${bottomPadding ?? 0}px ${horizontalPadding}`
 })
 
-const backgroundColor = computed(() => block.value.styleProperty.backgroundColor)
+const backgroundColor = computed(() => block.value?.styleProperty.backgroundColor ?? '#ffffff')
 
 const isModalOpen = ref(false)
 const currentImageIndex = ref<number | null>(null)
@@ -54,7 +56,7 @@ function handleImageSelected(image: string) {
   <div
     class="flex justify-center"
     :style="{
-      gap: `${block.styleProperty.galleryLayout === 'spaceless' ? '0' : '20px'}`,
+      gap: `${block?.styleProperty.galleryLayout === 'spaceless' ? '0' : '20px'}`,
       padding: `${customPadding}`,
       backgroundColor: backgroundColor ?? '#ffffff',
     }"
