@@ -25,7 +25,11 @@ const blocks = ref<(ImageBlock | TextBlock)[]>([
   {
     id: '',
     type: 'TextBlock',
-    content: 'Lorem ipsum',
+    content: `
+      <p>
+        Write engaging and informative content that will help your readers understand your message.
+      </p>
+    `,
     styleProperty: {
       topPadding: 10,
       bottomPadding: 10,
@@ -94,5 +98,6 @@ useDraggable(blockRef, blocks, {
   background-color: transparent;
   border: 2px dashed gray;
   place-items: center;
+  margin-bottom: 16px;
 }
 </style>

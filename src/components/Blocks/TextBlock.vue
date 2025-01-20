@@ -11,7 +11,7 @@ const block = useBlockStore().getBlocks[props.index] as TextBlock
 const { topPadding, bottomPadding, backgroundColor } = block.styleProperty
 
 const customVPadding = computed(() => `pt-${topPadding ?? 10} pb-${bottomPadding ?? 10}`)
-const data = ref('')
+const data = ref(block.content)
 
 function updateText(event) {
   data.value = event.target.innerHTML
@@ -30,7 +30,7 @@ function updateText(event) {
 
 <template>
   <div :class="`p-4 border ${customVPadding} rounded bg-[${backgroundColor ?? '#808080'}]`">
-    <Tiptap @input="updateText" />
+    <Tiptap :content="data" @focusout="updateText" />
   </div>
 </template>
 
