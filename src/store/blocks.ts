@@ -1,45 +1,54 @@
 import { useArrayManager } from '@/composables/useArrayManager'
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-interface Block {
+export interface BaseBlock<TStyle> {
   id: string
+  type: string
+  styleProperty: TStyle
 }
 
-export interface ImageBlock extends Block {
+interface PaddingStyle {
+  topPadding: number
+  bottomPadding: number
+}
+
+interface ImageBlockStyle extends PaddingStyle {
+  galleryLayout: 'default' | 'spaceless' | 'full-width'
+  backgroundColor: string
+}
+
+interface TextBlockStyle extends PaddingStyle {
+  backgroundColor: string
+}
+
+export interface ImageBlock extends BaseBlock<ImageBlockStyle> {
   links: string[]
-  styleProperty: {
-    topPadding: number
-    bottomPadding: number
-    galleryLayout: 'default' | 'spaceless' | 'full-width'
-    backgroundColor: string
-  }
 }
 
-export interface TextBlock extends Block {
+export interface TextBlock extends BaseBlock<TextBlockStyle> {
   content: string
-  styleProperty: {
-    topPadding: number
-    bottomPadding: number
-    backgroundColor: string
-  }
 }
 
 export const useBlockStore = defineStore('blocks', {
   state: () => ({
-    blocks: [] satisfies Block[],
+    blocks: ref<(ImageBlock | TextBlock)[]>([]),
     selectedBlockIdx: null as number | null,
   }),
 
   actions: {
+    setBlocks(blocks: (ImageBlock | TextBlock)[]) {
+      this.blocks.value = blocks
+    },
     setBlock(block: ImageBlock | TextBlock, index: number) {
-      const { replace, mutatedArray } = useArrayManager(this.blocks)
+      const { replace, mutatedArray } = useArrayManager(this.blocks.value)
       replace(block, index)
-      this.blocks = mutatedArray
+      this.blocks.value = mutatedArray
     },
     addBlock(block: ImageBlock | TextBlock, index: number) {
-      const { insert, mutatedArray } = useArrayManager(this.blocks)
+      const { insert, mutatedArray } = useArrayManager(this.blocks.value)
       insert(block, index)
-      this.blocks = mutatedArray
+      this.blocks.value = mutatedArray
     },
     setSelectedBlockIdx(idx: number) {
       this.selectedBlockIdx = idx
@@ -47,18 +56,18 @@ export const useBlockStore = defineStore('blocks', {
   },
 
   getters: {
-    getBlocks(): Block[] {
-      return this.blocks
+    getBlocks(): (ImageBlock | TextBlock)[] {
+      return this.blocks?.value ?? []
     },
     getStyleProperty(): object {
-      return this.blocks[0].styleProperty
+      return this.blocks.value[0].styleProperty
     },
   },
 })
 
 export const useHoverFirstItemStore = defineStore('hoverFirstItem', {
   state: () => ({
-    hoverFirstItem: false,
+    hoverFirstItem: ref<boolean>(false),
   }),
 
   actions: {
@@ -69,7 +78,7 @@ export const useHoverFirstItemStore = defineStore('hoverFirstItem', {
 
   getters: {
     getHoverFirstItem(): boolean {
-      return this.hoverFirstItem
+      return this.hoverFirstItem.value
     },
   },
 })

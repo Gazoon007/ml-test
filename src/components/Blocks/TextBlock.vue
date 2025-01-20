@@ -1,25 +1,23 @@
 <script setup lang="ts">
-import Tiptap from '@/components/Tiptap.vue'
+import type { TextBlock } from '@/store/blocks'
 
+import Tiptap from '@/components/Tiptap.vue'
 import { useBlockStore } from '@/store/blocks'
 import { computed, defineProps, ref } from 'vue'
 
-interface Props {
-  topPadding: number
-  bottomPadding: number
-  backgroundColor: string
-  color: string
-  index: number
-}
+const props = defineProps<{ index: number }>()
 
-const props = defineProps<Props>()
-const customVPadding = computed(() => `pt-${props?.topPadding ?? 10} pb-${props?.bottomPadding ?? 10}`)
+const blockStore = useBlockStore().getBlocks[props.index] as TextBlock
+const { topPadding, bottomPadding, backgroundColor } = blockStore.styleProperty
+
+const customVPadding = computed(() => `pt-${topPadding ?? 10} pb-${bottomPadding ?? 10}`)
 const data = ref('')
 
 function updateText(event) {
   data.value = event.target.innerHTML
   useBlockStore().setBlock({
     id: useBlockStore().getBlocks[props.index].id,
+    type: 'TextBlock',
     content: data.value,
     styleProperty: {
       topPadding: 10,
@@ -31,7 +29,7 @@ function updateText(event) {
 </script>
 
 <template>
-  <div :class="`p-4 border ${customVPadding} rounded bg-[${props?.backgroundColor ?? '#808080'}]`">
+  <div :class="`p-4 border ${customVPadding} rounded bg-[${backgroundColor ?? '#808080'}]`">
     <Tiptap @input="updateText" />
   </div>
 </template>

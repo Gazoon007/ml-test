@@ -1,22 +1,20 @@
 <script setup lang="ts">
+import type { ImageBlock } from '@/store/blocks'
 import ImageSelectModal from '@/components/ImageSelectModal.vue'
 import { useBlockStore } from '@/store/blocks'
 import { computed, ref } from 'vue'
 
-interface Props {
-  imageCount: number
-  backgroundColor: string
-  topPadding: number
-  bottomPadding: number
-  galleryLayout: 'default' | 'spaceless' | 'full-width'
-  index: number
-}
+const props = defineProps<{ index: number }>()
 
-const props = defineProps<Props>()
-const images = ref<(string | null)[]>(Array.from<string | null>({ length: props?.imageCount ?? 3 }).fill(null))
+const blockStore = useBlockStore().getBlocks[props.index] as ImageBlock
+const { topPadding, bottomPadding, backgroundColor, galleryLayout } = blockStore.styleProperty
+
+const images = ref<(string | null)[]>(blockStore.links)
 const imageSlots = computed(() => images.value)
-const customPX = computed(() => props.galleryLayout === 'default' ? 'px-50px gap-4' : props.galleryLayout === 'spaceless' ? 'px-50px' : 'px-0')
-const customVPadding = computed(() => `pt-${props?.topPadding ?? 0} pb-${props?.bottomPadding ?? 0}`)
+
+const customPX = computed(() => galleryLayout === 'default' ? 'px-50px gap-4' : galleryLayout === 'spaceless' ? 'px-50px' : 'px-0')
+const customVPadding = computed(() => `pt-${topPadding ?? 0} pb-${bottomPadding ?? 0}`)
+
 const isModalOpen = ref(false)
 const currentImageIndex = ref(null)
 
@@ -34,6 +32,7 @@ function handleImageSelected(image: string) {
   images.value[currentImageIndex.value] = image
   useBlockStore().setBlock({
     id: useBlockStore().getBlocks[props.index].id,
+    type: 'ImageBlock',
     links: images.value,
     styleProperty: {
       topPadding: 100,
@@ -46,7 +45,7 @@ function handleImageSelected(image: string) {
 </script>
 
 <template>
-  <div :class="`flex justify-center ${customPX} ${customVPadding} bg-[${props?.backgroundColor ?? '#808080'}]`">
+  <div :class="`flex justify-center ${customPX} ${customVPadding} bg-[${backgroundColor ?? '#808080'}]`">
     <div
       v-for="(image, index) in imageSlots"
       :key="index"
