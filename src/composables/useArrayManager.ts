@@ -1,3 +1,4 @@
+import { useCloned } from '@vueuse/core'
 import { ref } from 'vue'
 
 export function useArrayManager(initialArray = []) {
@@ -22,8 +23,8 @@ export function useArrayManager(initialArray = []) {
   const duplicate = (index) => {
     if (index >= 0 && index < array.value.length) {
       const newArr = [...array.value]
-      const newItem = ref({ ...newArr[index] })
-      newArr.splice(index + 1, 0, newItem.value)
+      const newItem = { ...newArr[index], id: Date.now().toString() }
+      newArr.splice(index + 1, 0, useCloned(newItem).cloned.value)
       array.value = newArr
     }
   }
