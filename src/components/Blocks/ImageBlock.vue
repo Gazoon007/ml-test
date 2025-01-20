@@ -6,17 +6,21 @@ import { computed, ref } from 'vue'
 
 const props = defineProps<{ index: number }>()
 
-const block = useBlockStore().getBlocks[props.index] as ImageBlock
-const { topPadding, bottomPadding, backgroundColor, galleryLayout } = block.styleProperty
+const block = computed(() => useBlockStore().getBlocks[props.index] as ImageBlock)
 
-const images = ref<(string | null)[]>(block.links)
+const images = ref<(string | null)[]>(block.value.links)
 const imageSlots = computed(() => images.value)
 
-const customPX = computed(() => galleryLayout === 'default' ? 'px-50px gap-4' : galleryLayout === 'spaceless' ? 'px-50px' : 'px-0')
-const customVPadding = computed(() => `pt-${topPadding ?? 0} pb-${bottomPadding ?? 0}`)
+const customPadding = computed(() => {
+  const { topPadding, bottomPadding, galleryLayout } = block.value.styleProperty
+  const horizontalPadding = galleryLayout === 'default' || galleryLayout === 'spaceless' ? '50px' : '0'
+  return `${topPadding ?? 0}px ${horizontalPadding} ${bottomPadding ?? 0}px ${horizontalPadding}`
+})
+
+const backgroundColor = computed(() => block.value.styleProperty.backgroundColor)
 
 const isModalOpen = ref(false)
-const currentImageIndex = ref(null)
+const currentImageIndex = ref<number | null>(null)
 
 function openModal(index: number) {
   currentImageIndex.value = index
@@ -29,23 +33,32 @@ function closeModal() {
 }
 
 function handleImageSelected(image: string) {
+  const { topPadding, bottomPadding, backgroundColor, galleryLayout } = block.value.styleProperty
+
   images.value[currentImageIndex.value] = image
   useBlockStore().setBlock({
-    id: block.id,
+    id: block.value.id,
     type: 'ImageBlock',
     links: images.value,
     styleProperty: {
-      topPadding: 100,
-      bottomPadding: 100,
-      galleryLayout: 'default',
-      backgroundColor: '#ffffff',
+      topPadding,
+      bottomPadding,
+      galleryLayout,
+      backgroundColor,
     },
   }, props.index)
 }
 </script>
 
 <template>
-  <div :class="`flex justify-center ${customPX} ${customVPadding} bg-[${backgroundColor ?? '#808080'}]`">
+  <div
+    class="flex justify-center"
+    :style="{
+      gap: `${block.styleProperty.galleryLayout === 'spaceless' ? '0' : '20px'}`,
+      padding: `${customPadding}`,
+      backgroundColor: backgroundColor ?? '#ffffff',
+    }"
+  >
     <div
       v-for="(image, index) in imageSlots"
       :key="index"
@@ -56,7 +69,7 @@ function handleImageSelected(image: string) {
         <img :src="image" alt="Uploaded image" class="h-full object-cover rounded-md min-w-126px">
       </template>
       <template v-else>
-        <img src="/src/assets/placeholder-image-block.jpg" alt="=placeholder" class="text-gray-500 text-sm w-32">
+        <img src="/src/assets/placeholder-image-block.jpg" alt="placeholder" class="text-gray-500 text-sm w-31">
       </template>
     </div>
     <ImageSelectModal
