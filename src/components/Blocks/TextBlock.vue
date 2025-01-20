@@ -7,8 +7,8 @@ import { computed, defineProps, ref } from 'vue'
 
 const props = defineProps<{ index: number }>()
 
-const blockStore = useBlockStore().getBlocks[props.index] as TextBlock
-const { topPadding, bottomPadding, backgroundColor } = blockStore.styleProperty
+const block = useBlockStore().getBlocks[props.index] as TextBlock
+const { topPadding, bottomPadding, backgroundColor } = block.styleProperty
 
 const customVPadding = computed(() => `pt-${topPadding ?? 10} pb-${bottomPadding ?? 10}`)
 const data = ref('')
@@ -16,7 +16,7 @@ const data = ref('')
 function updateText(event) {
   data.value = event.target.innerHTML
   useBlockStore().setBlock({
-    id: useBlockStore().getBlocks[props.index].id,
+    id: block.id,
     type: 'TextBlock',
     content: data.value,
     styleProperty: {

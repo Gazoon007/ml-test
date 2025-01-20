@@ -6,10 +6,10 @@ import { computed, ref } from 'vue'
 
 const props = defineProps<{ index: number }>()
 
-const blockStore = useBlockStore().getBlocks[props.index] as ImageBlock
-const { topPadding, bottomPadding, backgroundColor, galleryLayout } = blockStore.styleProperty
+const block = useBlockStore().getBlocks[props.index] as ImageBlock
+const { topPadding, bottomPadding, backgroundColor, galleryLayout } = block.styleProperty
 
-const images = ref<(string | null)[]>(blockStore.links)
+const images = ref<(string | null)[]>(block.links)
 const imageSlots = computed(() => images.value)
 
 const customPX = computed(() => galleryLayout === 'default' ? 'px-50px gap-4' : galleryLayout === 'spaceless' ? 'px-50px' : 'px-0')
@@ -31,7 +31,7 @@ function closeModal() {
 function handleImageSelected(image: string) {
   images.value[currentImageIndex.value] = image
   useBlockStore().setBlock({
-    id: useBlockStore().getBlocks[props.index].id,
+    id: block.id,
     type: 'ImageBlock',
     links: images.value,
     styleProperty: {
