@@ -29,17 +29,17 @@ onBeforeUnmount(() => {
 })
 
 const actions = computed(() => [
-  { label: 'Bold', handler: () => editor.value.chain().focus().toggleBold().run(), disabled: !editor.value?.can().chain().focus().toggleBold().run(), isActive: editor.value?.isActive('bold') },
-  { label: 'Italic', handler: () => editor.value.chain().focus().toggleItalic().run(), disabled: !editor.value?.can().chain().focus().toggleItalic().run(), isActive: editor.value?.isActive('italic') },
-  { label: 'Strike', handler: () => editor.value.chain().focus().toggleStrike().run(), disabled: !editor.value?.can().chain().focus().toggleStrike().run(), isActive: editor.value?.isActive('strike') },
-  { label: 'Code', handler: () => editor.value.chain().focus().toggleCode().run(), disabled: !editor.value?.can().chain().focus().toggleCode().run(), isActive: editor.value?.isActive('code') },
-  { label: 'Clear Marks', handler: () => editor.value.chain().focus().unsetAllMarks().run(), disabled: false, isActive: false },
-  { label: 'Clear Nodes', handler: () => editor.value.chain().focus().clearNodes().run(), disabled: false, isActive: false },
-  { label: 'Paragraph', handler: () => editor.value.chain().focus().setParagraph().run(), disabled: false, isActive: editor.value?.isActive('paragraph') },
-  { label: 'Bullet List', handler: () => editor.value.chain().focus().toggleBulletList().run(), disabled: false, isActive: editor.value?.isActive('bulletList') },
-  { label: 'Ordered List', handler: () => editor.value.chain().focus().toggleOrderedList().run(), disabled: false, isActive: editor.value?.isActive('orderedList') },
-  { label: 'Undo', handler: () => editor.value.chain().focus().undo().run(), disabled: !editor.value?.can().chain().focus().undo().run(), isActive: false },
-  { label: 'Redo', handler: () => editor.value.chain().focus().redo().run(), disabled: !editor.value?.can().chain().focus().redo().run(), isActive: false },
+  { label: '𝗕', handler: () => editor.value.chain().focus().toggleBold().run(), disabled: !editor.value?.can().chain().focus().toggleBold().run(), isActive: editor.value?.isActive('bold') },
+  { label: '𝑖', handler: () => editor.value.chain().focus().toggleItalic().run(), disabled: !editor.value?.can().chain().focus().toggleItalic().run(), isActive: editor.value?.isActive('italic') },
+  { label: 'S', handler: () => editor.value.chain().focus().toggleStrike().run(), disabled: !editor.value?.can().chain().focus().toggleStrike().run(), isActive: editor.value?.isActive('strike') },
+  { label: '</>', handler: () => editor.value.chain().focus().toggleCode().run(), disabled: !editor.value?.can().chain().focus().toggleCode().run(), isActive: editor.value?.isActive('code') },
+  { label: '⌫', handler: () => editor.value.chain().focus().unsetAllMarks().run(), disabled: false, isActive: false },
+  { label: '🟰', handler: () => editor.value.chain().focus().clearNodes().run(), disabled: false, isActive: false },
+  { label: '¶', handler: () => editor.value.chain().focus().setParagraph().run(), disabled: false, isActive: editor.value?.isActive('paragraph') },
+  { label: '•', handler: () => editor.value.chain().focus().toggleBulletList().run(), disabled: false, isActive: editor.value?.isActive('bulletList') },
+  { label: '1.', handler: () => editor.value.chain().focus().toggleOrderedList().run(), disabled: false, isActive: editor.value?.isActive('orderedList') },
+  { label: '↩', handler: () => editor.value.chain().focus().undo().run(), disabled: !editor.value?.can().chain().focus().undo().run(), isActive: false },
+  { label: '↪', handler: () => editor.value.chain().focus().redo().run(), disabled: !editor.value?.can().chain().focus().redo().run(), isActive: false },
 ])
 </script>
 
