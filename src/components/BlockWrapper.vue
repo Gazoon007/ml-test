@@ -26,12 +26,10 @@ const leftMethods = methods.slice(0, 3)
 const rightMethods = methods.slice(3)
 
 function showControlPanel(index) {
-  // useBlockStore().setSelectedBlockIdx(index)
   hoveredSection.value = index
 }
 
 function hideControlPanel() {
-  // useBlockStore().setSelectedBlockIdx(null)
   hoveredSection.value = null
 }
 </script>

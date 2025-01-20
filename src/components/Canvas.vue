@@ -28,11 +28,24 @@ useDraggable(dropzone, blocks, {
 })
 
 const hoverStore = useHoverFirstItemStore()
+const blockStore = useBlockStore()
 const { getHoverFirstItem } = storeToRefs(hoverStore)
+const { getBlocks } = storeToRefs(blockStore)
 
 useBlockStore().$subscribe(() => {
-  blocks.value = useBlockStore().getBlocks
+  blocks.value = getBlocks.value
 })
+
+const currentSelectedIndex = ref<number | null>(null)
+function handleBlockClick(idx: number) {
+  currentSelectedIndex.value = idx
+  useBlockStore().setSelectedBlockIdx(idx)
+}
+
+function save() {
+  // eslint-disable-next-line no-console
+  console.log('JSON', JSON.parse(JSON.stringify(blocks.value)))
+}
 </script>
 
 <template>
@@ -44,11 +57,8 @@ useBlockStore().$subscribe(() => {
             Canvas
           </h2>
           <div class="flex gap-2">
-            <button class="px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 rounded">
-              Preview
-            </button>
-            <button class="px-3 py-1 text-sm bg-blue-500 text-white hover:bg-blue-600 rounded">
-              Save
+            <button class="px-3 py-1 text-sm bg-blue-500 text-white hover:bg-blue-600 rounded" @click="save">
+              Save (console.log())
             </button>
           </div>
         </div>
@@ -56,9 +66,17 @@ useBlockStore().$subscribe(() => {
         <div class="p-4 md:p-8">
           <div class="min-h-[500px]">
             <section ref="dropzone" class="no-drag">
-              <div v-for="(block, idx) in blocks" :key="block">
-                <BlockWrapper :key="block.id" :index="idx">
-                  <component :is="block.type === 'ImageBlock' ? ImageBlock : TextBlock" :index="idx" />
+              <!-- FIXME: Find the cause why block.id on :key doesn't work for block wrapper and dynamic component -->
+              <div v-for="(block, idx) in blocks" :key="block.id + Date.now()">
+                <BlockWrapper
+                  :index="idx"
+                  :class="{
+                    'border-2 border-dashed border-gray-300': idx === currentSelectedIndex,
+                    'border-transparent': idx !== currentSelectedIndex,
+                  }"
+                  class="p-2 transition-colors"
+                >
+                  <component :is="block.type === 'ImageBlock' ? ImageBlock : TextBlock" :index="idx" @click="handleBlockClick(idx)" />
                 </BlockWrapper>
               </div>
               <template v-if="blocks.length === 0 && !getHoverFirstItem">
