@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Canvas from '@/components/Canvas.vue'
+import Config from '@/components/Config.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import { ref } from 'vue'
 
@@ -31,6 +32,12 @@ function toggleSidebar() {
     />
 
     <Canvas />
+
+    <Config
+      :is-open="isSidebarOpen"
+      class="transition-all duration-300"
+      @close="toggleSidebar"
+    />
   </div>
 </template>
 
