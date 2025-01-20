@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint --fix",
+    "test": "vitest"
   },
   "dependencies": {
     "@tiptap/extension-color": "^2.11.2",
@@ -23,15 +24,19 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.14.0",
+    "@pinia/testing": "^0.1.7",
     "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/test-utils": "^2.4.6",
     "eslint": "^9.18.0",
     "eslint-plugin-vue": "^9.32.0",
+    "jsdom": "^26.0.0",
     "lint-staged": "^15.4.1",
     "simple-git-hooks": "^2.11.1",
     "typescript": "^5.7.3",
     "unocss": "^65.4.2",
     "vite": "^6.0.5",
-    "vite-plugin-vue-devtools": "^7.6.8"
+    "vite-plugin-vue-devtools": "^7.6.8",
+    "vitest": "^3.0.2"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
