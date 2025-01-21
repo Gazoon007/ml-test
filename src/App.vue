@@ -2,42 +2,28 @@
 import Canvas from '@/components/Canvas.vue'
 import Config from '@/components/Config.vue'
 import Sidebar from '@/components/Sidebar.vue'
-import { ref } from 'vue'
-
-const isSidebarOpen = ref(true)
-
-function toggleSidebar() {
-  isSidebarOpen.value = !isSidebarOpen.value
-}
 </script>
 
 <template>
   <div class="flex flex-col md:flex-row min-h-screen bg-gray-100">
-    <div class="md:hidden bg-gray-800 text-white p-4 flex items-center justify-between">
-      <h1 class="text-xl font-bold">
-        Page Builder
-      </h1>
-      <button
-        class="p-2 hover:bg-gray-700 rounded-md"
-        @click="toggleSidebar"
-      >
-        <span class="text-2xl">☰</span>
-      </button>
+    <!-- Sidebar - Static width on desktop -->
+    <div class="md:w-[280px] md:flex-none">
+      <Sidebar
+        class="fixed md:static top-0 left-0 w-full md:w-[280px] h-[200px] md:h-screen bg-gray-800 z-40"
+      />
     </div>
 
-    <Sidebar
-      :is-open="isSidebarOpen"
-      class="transition-all duration-300"
-      @close="toggleSidebar"
-    />
+    <!-- Main Canvas -->
+    <div class="flex-1 mt-[200px] md:mt-0 mb-[240px] md:mb-0">
+      <Canvas />
+    </div>
 
-    <Canvas />
-
-    <Config
-      :is-open="isSidebarOpen"
-      class="transition-all duration-300"
-      @close="toggleSidebar"
-    />
+    <!-- Config - Static width on desktop -->
+    <div class="md:w-[280px] md:flex-none">
+      <Config
+        class="fixed md:static bottom-0 left-0 w-full md:w-[280px] h-[240px] md:h-screen bg-gray-400 z-30"
+      />
+    </div>
   </div>
 </template>
 

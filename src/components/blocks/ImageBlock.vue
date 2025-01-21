@@ -59,7 +59,7 @@ function handleImageSelected(image: string) {
   <div
     class="flex justify-center"
     :style="{
-      gap: `${block?.styleProperty.galleryLayout === 'spaceless' ? '0' : '20px'}`,
+      gap: `${block?.styleProperty.galleryLayout === 'spaceless' ? '0' : '10%'}`,
       padding: `${customPadding}`,
       backgroundColor: backgroundColor ?? '#ffffff',
     }"
@@ -67,14 +67,14 @@ function handleImageSelected(image: string) {
     <div
       v-for="(image, index) in imageSlots"
       :key="index"
-      class="h-32 border border-dashed border-gray-400 rounded-md flex items-center justify-center cursor-pointer"
+      class="w-[25vw] md:w-32 aspect-square border border-dashed border-gray-400 rounded-md flex items-center justify-center cursor-pointer"
       @click="openModal(index)"
     >
       <template v-if="image">
-        <img :src="image" alt="Uploaded image" class="h-full object-cover rounded-md min-w-126px">
+        <img :src="image" alt="Uploaded image" class="h-full w-full object-cover rounded-md">
       </template>
       <template v-else>
-        <img src="/src/assets/placeholder-image-block.jpg" alt="placeholder" class="text-gray-500 text-sm w-31">
+        <img src="/src/assets/placeholder-image-block.jpg" alt="placeholder" class="w-[60%] md:w-20">
       </template>
     </div>
     <ImageSelectModal
