@@ -1,18 +1,18 @@
+import Canvas from '@/components/Canvas.vue'
 import { useBlockStore } from '@/store/blocks'
 import { createTestingPinia } from '@pinia/testing'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
-import Canvas from '../Canvas.vue'
 
 // Mock child components
-vi.mock('@/components/Blocks/ImageBlock.vue', () => ({
+vi.mock('@/components/blocks/ImageBlock.vue', () => ({
   default: {
     props: ['index'],
     template: '<div class="image-block">Image Block</div>',
   },
 }))
 
-vi.mock('@/components/Blocks/TextBlock.vue', () => ({
+vi.mock('@/components/blocks/TextBlock.vue', () => ({
   default: {
     props: ['index'],
     emits: ['click'],

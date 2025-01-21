@@ -1,7 +1,7 @@
+import BlockWrapper from '@/components/BlockWrapper.vue'
 import { createTestingPinia } from '@pinia/testing'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
-import BlockWrapper from '../BlockWrapper.vue'
 
 describe('blockWrapper.vue', () => {
   const createWrapper = (props = {}) => {

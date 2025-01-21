@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ImageBlock from '@/components/Blocks/ImageBlock.vue'
-import TextBlock from '@/components/Blocks/TextBlock.vue'
+import ImageBlock from '@/components/blocks/ImageBlock.vue'
+import TextBlock from '@/components/blocks/TextBlock.vue'
 import BlockWrapper from '@/components/BlockWrapper.vue'
 import { useBlockStore, useHoverFirstItemStore } from '@/store/blocks'
 import { storeToRefs } from 'pinia'

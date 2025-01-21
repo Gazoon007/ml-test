@@ -52,7 +52,7 @@ page-builder/
 │   │   ├── base.css
 │   │   └── main.css
 │   ├── components/
-│   │   ├── Blocks/
+│   │   ├── blocks/
 │   │   │   ├── ImageBlock.vue
 │   │   │   └── TextBlock.vue
 │   │   ├── __tests__/

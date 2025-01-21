@@ -1,8 +1,8 @@
+import Config from '@/components/Config.vue'
 import { useBlockStore } from '@/store/blocks'
 import { createTestingPinia } from '@pinia/testing'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
-import Config from '../Config.vue'
 
 // Mock components
 vi.mock('@/components/Tiptap.vue', () => ({

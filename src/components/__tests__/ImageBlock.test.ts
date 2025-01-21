@@ -1,7 +1,7 @@
+import ImageBlock from '@/components/blocks/ImageBlock.vue'
 import { createTestingPinia } from '@pinia/testing'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
-import ImageBlock from '../Blocks/ImageBlock.vue'
 
 describe('imageBlock.vue', () => {
   const createWrapper = (props = {}) => {

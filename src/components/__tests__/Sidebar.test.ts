@@ -1,8 +1,8 @@
+import Sidebar from '@/components/Sidebar.vue'
 import { useBlockStore, useHoverFirstItemStore } from '@/store/blocks'
 import { createTestingPinia } from '@pinia/testing'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
-import Sidebar from '../Sidebar.vue'
 
 // Mock vue-draggable-plus
 // eslint-disable-next-line ts/no-unsafe-function-type
