@@ -72,7 +72,11 @@ page-builder/
 │   ├── composables/
 │   │   └── useArrayManager.ts
 │   ├── store/
-│   │   └── blocks.ts
+│   │   ├── blocks.ts
+│   │   └── hover.ts
+│   ├── types/
+│   │   ├── blocks.ts
+│   │   └── index.ts
 │   ├── App.vue
 │   └── main.ts
 ├── public/
