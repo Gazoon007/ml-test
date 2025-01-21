@@ -1,5 +1,6 @@
 import Sidebar from '@/components/Sidebar.vue'
-import { useBlockStore, useHoverFirstItemStore } from '@/store/blocks'
+import { useBlockStore } from '@/store/blocks'
+import { useHoverFirstItemStore } from '@/store/hover.ts'
 import { createTestingPinia } from '@pinia/testing'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
