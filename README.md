@@ -45,6 +45,7 @@ A Vue.js-based drag-and-drop page builder that allows users to create and custom
 
 ## Project Structure
 
+```
 page-builder/
 ├── src/
 │   ├── assets/
@@ -85,6 +86,7 @@ page-builder/
 ├── vite.config.js
 ├── vitest.config.ts
 └── eslint.config.js
+```
 
 ### Code Style
 
