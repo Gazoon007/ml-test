@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TextBlock } from '@/store/blocks'
+import type { TextBlock } from '@/types/blocks'
 
 import Tiptap from '@/components/Tiptap.vue'
 import { useBlockStore } from '@/store/blocks'

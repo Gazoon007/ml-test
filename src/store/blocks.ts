@@ -1,34 +1,6 @@
+import type { ImageBlock, ImageBlockStyle, TextBlock, TextBlockStyle } from '@/types/blocks'
 import { useArrayManager } from '@/composables/useArrayManager'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
-
-export interface BaseBlock<TStyle> {
-  id: string
-  type: string
-  styleProperty: TStyle
-}
-
-interface PaddingStyle {
-  topPadding: number
-  bottomPadding: number
-}
-
-export interface ImageBlockStyle extends PaddingStyle {
-  galleryLayout: 'default' | 'spaceless'
-  backgroundColor: string
-}
-
-export interface TextBlockStyle extends PaddingStyle {
-  backgroundColor: string
-}
-
-export interface ImageBlock extends BaseBlock<ImageBlockStyle> {
-  links: (string | null)[]
-}
-
-export interface TextBlock extends BaseBlock<TextBlockStyle> {
-  content: string
-}
 
 export const useBlockStore = defineStore('blocks', {
   state: () => ({
@@ -64,24 +36,6 @@ export const useBlockStore = defineStore('blocks', {
     },
     getStyleProperty(): ImageBlockStyle | TextBlockStyle | null {
       return this.selectedBlockIdx !== null ? this.blocks[this.selectedBlockIdx]?.styleProperty ?? null : null
-    },
-  },
-})
-
-export const useHoverFirstItemStore = defineStore('hoverFirstItem', {
-  state: () => ({
-    hoverFirstItem: ref(false),
-  }),
-
-  actions: {
-    setHoverFirstItem(val: boolean) {
-      this.hoverFirstItem = val
-    },
-  },
-
-  getters: {
-    getHoverFirstItem(): boolean {
-      return this.hoverFirstItem
     },
   },
 })

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ImageBlock } from '@/store/blocks'
+import type { ImageBlock } from '@/types/blocks'
 import ImageSelectModal from '@/components/ImageSelectModal.vue'
 import { useBlockStore } from '@/store/blocks'
 import { computed, ref } from 'vue'
@@ -8,7 +8,7 @@ const props = defineProps<{ index: number }>()
 
 const block = computed(() => useBlockStore().getBlocks[props.index] as ImageBlock)
 
-const images = ref<string[]>(block.value?.links ?? [])
+const images = ref<(string | null)[]>(block.value?.links ?? [])
 const imageSlots = computed(() => images.value)
 
 const customPadding = computed(() => {

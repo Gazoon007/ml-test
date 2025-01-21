@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ImageBlockStyle, TextBlockStyle } from '@/store/blocks'
+import type { ImageBlockStyle, TextBlockStyle } from '@/types/blocks'
 import { useBlockStore } from '@/store/blocks'
 import { computed, ref } from 'vue'
 

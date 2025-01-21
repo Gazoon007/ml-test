@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { ImageBlock, TextBlock } from '@/store/blocks'
+import type { ImageBlock, TextBlock } from '@/types/blocks'
 import ImageBlockComponent from '@/components/blocks/ImageBlock.vue'
 import TextBlockComponent from '@/components/blocks/TextBlock.vue'
 import BlockWrapper from '@/components/BlockWrapper.vue'
-import { useBlockStore, useHoverFirstItemStore } from '@/store/blocks'
+import { useBlockStore } from '@/store/blocks'
+import { useHoverFirstItemStore } from '@/store/hover.ts'
 import { storeToRefs } from 'pinia'
 import { ref, useTemplateRef } from 'vue'
 import { useDraggable } from 'vue-draggable-plus'

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import type { ImageBlock, TextBlock } from '@/store/blocks'
-import { useBlockStore, useHoverFirstItemStore } from '@/store/blocks'
+import type { ImageBlock, TextBlock } from '@/types/blocks'
+import { useBlockStore } from '@/store/blocks'
+import { useHoverFirstItemStore } from '@/store/hover'
 import { defineProps, ref, useTemplateRef } from 'vue'
 import { useDraggable } from 'vue-draggable-plus'
 
