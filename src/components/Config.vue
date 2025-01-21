@@ -3,21 +3,23 @@ import type { ImageBlockStyle, TextBlockStyle } from '@/store/blocks'
 import { useBlockStore } from '@/store/blocks'
 import { computed, ref } from 'vue'
 
-const styleProperty = ref<ImageBlockStyle | TextBlockStyle>({
+const styleProperty = ref<ImageBlockStyle | TextBlockStyle | null>({
   backgroundColor: '',
   bottomPadding: 0,
-  galleryLayout: undefined,
+  galleryLayout: 'default' as const,
   topPadding: 0,
 })
 
 useBlockStore().$subscribe(() => {
-  styleProperty.value = useBlockStore().getStyleProperty
+  const newStyle = useBlockStore().getStyleProperty
+  if (newStyle)
+    styleProperty.value = newStyle
 })
 
 const selectedLayout = ref('default')
 const currentBlock = computed(() => useBlockStore().getCurrentBlock)
 
-function setLayout(layout) {
+function setLayout(layout: 'default' | 'spaceless') {
   (styleProperty.value as ImageBlockStyle).galleryLayout = layout
   selectedLayout.value = layout
 }
@@ -25,7 +27,7 @@ function setLayout(layout) {
 
 <template>
   <div class="bg-gray-400 p-6 rounded-lg w-240px">
-    <div v-if="currentBlock" class="mb-4">
+    <div v-if="currentBlock && styleProperty" class="mb-4">
       <label class="block text-gray-700 font-medium mb-2">Top Padding</label>
       <input
         v-model="styleProperty.topPadding"
@@ -36,7 +38,7 @@ function setLayout(layout) {
       >
     </div>
 
-    <div v-if="currentBlock" class="mb-4">
+    <div v-if="currentBlock && styleProperty" class="mb-4">
       <label class="block text-gray-700 font-medium mb-2">Bottom Padding</label>
       <input
         v-model="styleProperty.bottomPadding"
@@ -47,7 +49,7 @@ function setLayout(layout) {
       >
     </div>
 
-    <div v-if="currentBlock?.type === 'ImageBlock'" class="mb-4">
+    <div v-if="currentBlock?.type === 'ImageBlock' && styleProperty" class="mb-4">
       <label class="block text-gray-700 font-medium mb-2">Gallery Layout</label>
       <div class="flex space-x-2">
         <button
@@ -67,7 +69,7 @@ function setLayout(layout) {
       </div>
     </div>
 
-    <div v-if="currentBlock" class="mb-4">
+    <div v-if="currentBlock && styleProperty" class="mb-4">
       <label class="block text-gray-700 font-medium mb-2">Background</label>
       <input
         v-model="styleProperty.backgroundColor"

@@ -1,26 +1,27 @@
 <script setup lang="ts">
-import ImageBlock from '@/components/blocks/ImageBlock.vue'
-import TextBlock from '@/components/blocks/TextBlock.vue'
+import type { ImageBlock, TextBlock } from '@/store/blocks'
+import ImageBlockComponent from '@/components/blocks/ImageBlock.vue'
+import TextBlockComponent from '@/components/blocks/TextBlock.vue'
 import BlockWrapper from '@/components/BlockWrapper.vue'
 import { useBlockStore, useHoverFirstItemStore } from '@/store/blocks'
 import { storeToRefs } from 'pinia'
-import { defineComponent, ref, useTemplateRef } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 import { useDraggable } from 'vue-draggable-plus'
 
-defineComponent({
-  components: {
-    ImageBlock,
-    TextBlock,
-  },
-})
-const blocks = ref([])
+// Remove defineComponent and directly use components
+const ImageBlockComp = ImageBlockComponent
+const TextBlockComp = TextBlockComponent
+
+const blocks = ref<(ImageBlock | TextBlock)[]>([])
 const dropzone = useTemplateRef('dropzone')
 useDraggable(dropzone, blocks, {
   animation: 150,
   ghostClass: 'ghost',
   group: 'block',
   onAdd: (evt) => {
-    const block = blocks.value[evt.newIndex]
+    if (typeof evt.newIndex !== 'number')
+      return
+    const block = blocks.value[evt.newIndex] as ImageBlock | TextBlock
     block.id = Date.now().toString()
     useBlockStore().addBlock(block, evt.newIndex)
   },
@@ -76,7 +77,7 @@ function save() {
                   }"
                   class="p-2 transition-colors"
                 >
-                  <component :is="block.type === 'ImageBlock' ? ImageBlock : TextBlock" :index="idx" @click="handleBlockClick(idx)" />
+                  <component :is="block.type === 'ImageBlock' ? ImageBlockComp : TextBlockComp" :index="idx" @click="handleBlockClick(idx)" />
                 </BlockWrapper>
               </div>
               <template v-if="blocks.length === 0 && !getHoverFirstItem">
