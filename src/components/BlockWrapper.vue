@@ -5,15 +5,15 @@ import { defineProps, ref, watch } from 'vue'
 
 defineProps<{ index: number }>()
 
-const hoveredSection = ref(null)
+const hoveredSection = ref<number | null>(null)
 
 const { moveUp, moveDown, duplicate, remove, mutatedArray } = useArrayManager(useBlockStore().getBlocks)
 
 const methods = [
-  { name: 'Move up', action: idx => moveUp(idx) },
-  { name: 'Move down', action: idx => moveDown(idx) },
-  { name: 'Duplicate', action: idx => duplicate(idx) },
-  { name: 'Remove', action: idx => remove(idx) },
+  { name: 'Move up', action: (idx: number) => moveUp(idx) },
+  { name: 'Move down', action: (idx: number) => moveDown(idx) },
+  { name: 'Duplicate', action: (idx: number) => duplicate(idx) },
+  { name: 'Remove', action: (idx: number) => remove(idx) },
 ]
 
 // TODO: refactor this setBlocks
@@ -24,7 +24,7 @@ watch(mutatedArray, (val) => {
 const leftMethods = methods.slice(0, 2)
 const rightMethods = methods.slice(2)
 
-function showControlPanel(index) {
+function showControlPanel(index: number) {
   hoveredSection.value = index
 }
 

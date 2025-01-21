@@ -23,7 +23,7 @@ export interface TextBlockStyle extends PaddingStyle {
 }
 
 export interface ImageBlock extends BaseBlock<ImageBlockStyle> {
-  links: string[]
+  links: (string | null)[]
 }
 
 export interface TextBlock extends BaseBlock<TextBlockStyle> {
@@ -59,11 +59,11 @@ export const useBlockStore = defineStore('blocks', {
     getBlocks(): (ImageBlock | TextBlock)[] {
       return this.blocks ?? []
     },
-    getCurrentBlock(): (ImageBlock | TextBlock) {
-      return this.blocks[this.selectedBlockIdx] ?? null
+    getCurrentBlock(): (ImageBlock | TextBlock) | null {
+      return this.selectedBlockIdx !== null ? this.blocks[this.selectedBlockIdx] : null
     },
     getStyleProperty(): ImageBlockStyle | TextBlockStyle | null {
-      return this.blocks[this.selectedBlockIdx]?.styleProperty ?? null
+      return this.selectedBlockIdx !== null ? this.blocks[this.selectedBlockIdx]?.styleProperty ?? null : null
     },
   },
 })

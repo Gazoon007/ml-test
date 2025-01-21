@@ -8,7 +8,7 @@ const props = defineProps<{ index: number }>()
 
 const block = computed(() => useBlockStore().getBlocks[props.index] as ImageBlock)
 
-const images = ref<(string | null)[]>(block.value?.links ?? null)
+const images = ref<string[]>(block.value?.links ?? [])
 const imageSlots = computed(() => images.value)
 
 const customPadding = computed(() => {
@@ -35,6 +35,9 @@ function closeModal() {
 }
 
 function handleImageSelected(image: string) {
+  if (currentImageIndex.value === null)
+    return
+
   const { topPadding, bottomPadding, backgroundColor, galleryLayout } = block.value.styleProperty
 
   images.value[currentImageIndex.value] = image

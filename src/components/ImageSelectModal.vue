@@ -13,7 +13,7 @@ function closeModal() {
   emit('close')
 }
 
-function selectImage(image) {
+function selectImage(image: any) {
   emit('imageSelected', `/mailerlite-family-photos/${image}`)
   closeModal()
 }
