@@ -68,9 +68,9 @@ function save() {
         <div class="p-4 md:p-8">
           <div class="min-h-[500px]">
             <section ref="dropzone" class="no-drag">
-              <!-- FIXME: Find the cause why block.id on :key doesn't work for block wrapper and dynamic component -->
-              <div v-for="(block, idx) in blocks" :key="block.id + Date.now()">
+              <div v-for="(block, idx) in blocks" :key="block.id">
                 <BlockWrapper
+                  :key="`wrapper-${block.id}`"
                   :index="idx"
                   :class="{
                     'border-2 border-dashed border-gray-300': idx === currentSelectedIndex,
@@ -78,7 +78,12 @@ function save() {
                   }"
                   class="p-2 transition-colors"
                 >
-                  <component :is="block.type === 'ImageBlock' ? ImageBlockComp : TextBlockComp" :index="idx" @click="handleBlockClick(idx)" />
+                  <component
+                    :is="block.type === 'ImageBlock' ? ImageBlockComp : TextBlockComp"
+                    :key="`block-${block.id}`"
+                    :index="idx"
+                    @click="handleBlockClick(idx)"
+                  />
                 </BlockWrapper>
               </div>
               <template v-if="blocks.length === 0 && !getHoverFirstItem">

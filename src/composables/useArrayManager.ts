@@ -2,8 +2,8 @@ import type { Ref } from 'vue'
 import { useCloned } from '@vueuse/core'
 import { ref } from 'vue'
 
-export function useArrayManager<T extends Record<string, any>>(initialArray: T[] = []) {
-  const array = ref<T[]>(initialArray) as Ref<T[]>
+export function useArrayManager<T extends Record<string, any>>(initialArray: T[]) {
+  const array = ref<T[]>([...initialArray]) as Ref<T[]>
 
   const moveUp = (index: number): void => {
     if (index > 0) {

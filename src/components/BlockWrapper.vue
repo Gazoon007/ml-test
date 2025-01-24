@@ -1,36 +1,38 @@
 <script setup lang="ts">
 import { useArrayManager } from '@/composables/useArrayManager'
 import { useBlockStore } from '@/store/blocks'
-import { defineProps, ref, watch } from 'vue'
+import { computed, defineProps, ref, watch } from 'vue'
 
 defineProps<{ index: number }>()
 
 const hoveredSection = ref<number | null>(null)
+const blockStore = useBlockStore()
+const blocks = computed(() => blockStore.getBlocks)
 
-const { moveUp, moveDown, duplicate, remove, mutatedArray } = useArrayManager(useBlockStore().getBlocks)
+const arrayManager = useArrayManager(blocks.value)
+watch(blocks, (newBlocks) => {
+  arrayManager.mutatedArray.value = [...newBlocks]
+}, { deep: true })
+
+function handleAction(action: (idx: number) => void) {
+  return (idx: number) => {
+    action(idx)
+    blockStore.setBlocks(arrayManager.mutatedArray.value)
+  }
+}
 
 const methods = [
-  { name: 'Move up', action: (idx: number) => moveUp(idx) },
-  { name: 'Move down', action: (idx: number) => moveDown(idx) },
-  { name: 'Duplicate', action: (idx: number) => duplicate(idx) },
-  { name: 'Remove', action: (idx: number) => remove(idx) },
+  { name: 'Move up', action: handleAction(arrayManager.moveUp) },
+  { name: 'Move down', action: handleAction(arrayManager.moveDown) },
+  { name: 'Duplicate', action: handleAction(arrayManager.duplicate) },
+  { name: 'Remove', action: handleAction(arrayManager.remove) },
 ]
-
-// TODO: refactor this setBlocks
-watch(mutatedArray, (val) => {
-  useBlockStore().setBlocks(val)
-})
 
 const leftMethods = methods.slice(0, 2)
 const rightMethods = methods.slice(2)
 
-function showControlPanel(index: number) {
-  hoveredSection.value = index
-}
-
-function hideControlPanel() {
-  hoveredSection.value = null
-}
+const showControlPanel = (index: number) => hoveredSection.value = index
+const hideControlPanel = () => hoveredSection.value = null
 </script>
 
 <template>
